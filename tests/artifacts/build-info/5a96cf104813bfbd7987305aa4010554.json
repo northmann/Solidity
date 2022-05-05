@@ -1,0 +1,71 @@
+{
+	"id": "5a96cf104813bfbd7987305aa4010554",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.7",
+	"solcLongVersion": "0.8.7+commit.e28d00a7",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"tests/Ballot_test.sol": {
+				"content": "// // SPDX-License-Identifier: GPL-3.0\n\n// pragma solidity >=0.7.0 <0.9.0;\n// import \"remix_tests.sol\"; // this import is automatically injected by Remix.\n// import \"hardhat/console.sol\";\n// import \"../contracts/3_Ballot.sol\";\n\n// contract BallotTest {\n   \n//     bytes32[] proposalNames;\n   \n//     Ballot ballotToTest;\n//     function beforeAll () public {\n//         proposalNames.push(bytes32(\"candidate1\"));\n//         ballotToTest = new Ballot(proposalNames);\n//     }\n    \n//     function checkWinningProposal () public {\n//         console.log(\"Running checkWinningProposal\");\n//         ballotToTest.vote(0);\n//         Assert.equal(ballotToTest.winningProposal(), uint(0), \"proposal at index 0 should be the winning proposal\");\n//         Assert.equal(ballotToTest.winnerName(), bytes32(\"candidate1\"), \"candidate1 should be the winner name\");\n//     }\n    \n//     function checkWinninProposalWithReturnValue () public view returns (bool) {\n//         return ballotToTest.winningProposal() == 0;\n//     }\n// }\n"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": false,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			}
+		}
+	},
+	"output": {
+		"errors": [
+			{
+				"component": "general",
+				"errorCode": "3420",
+				"formattedMessage": "Warning: Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.7;\"\n--> tests/Ballot_test.sol\n\n",
+				"message": "Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.7;\"",
+				"severity": "warning",
+				"sourceLocation": {
+					"end": -1,
+					"file": "tests/Ballot_test.sol",
+					"start": -1
+				},
+				"type": "Warning"
+			}
+		],
+		"sources": {
+			"tests/Ballot_test.sol": {
+				"ast": {
+					"absolutePath": "tests/Ballot_test.sol",
+					"exportedSymbols": {},
+					"id": 1,
+					"license": "GPL-3.0",
+					"nodeType": "SourceUnit",
+					"nodes": [],
+					"src": "1019:0:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}

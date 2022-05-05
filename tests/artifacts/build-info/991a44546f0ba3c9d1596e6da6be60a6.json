@@ -1,0 +1,83 @@
+{
+	"id": "991a44546f0ba3c9d1596e6da6be60a6",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.7",
+	"solcLongVersion": "0.8.7+commit.e28d00a7",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"tests/storage.test.js": {
+				"content": "// // Right click on the script name and hit \"Run\" to execute\n// const { expect } = require(\"chai\");\n// const { ethers } = require(\"hardhat\");\n\n// describe(\"Storage\", function () {\n//   it(\"test initial value\", async function () {\n//     const Storage = await ethers.getContractFactory(\"Storage\");\n//     const storage = await Storage.deploy();\n//     await storage.deployed();\n//     console.log('storage deployed at:'+ storage.address)\n//     expect((await storage.retrieve()).toNumber()).to.equal(0);\n//   });\n//    it(\"test updating and retrieving updated value\", async function () {\n//     const Storage = await ethers.getContractFactory(\"Storage\");\n//     const storage = await Storage.deploy();\n//     await storage.deployed();\n//     const storage2 = await ethers.getContractAt(\"Storage\", storage.address);\n//     const setValue = await storage2.store(56);\n//     await setValue.wait();\n//     expect((await storage2.retrieve()).toNumber()).to.equal(56);\n//   });\n// });"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": false,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			}
+		}
+	},
+	"output": {
+		"errors": [
+			{
+				"component": "general",
+				"errorCode": "1878",
+				"formattedMessage": "Warning: SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing \"SPDX-License-Identifier: <SPDX-License>\" to each source file. Use \"SPDX-License-Identifier: UNLICENSED\" for non-open-source code. Please see https://spdx.org for more information.\n--> tests/storage.test.js\n\n",
+				"message": "SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing \"SPDX-License-Identifier: <SPDX-License>\" to each source file. Use \"SPDX-License-Identifier: UNLICENSED\" for non-open-source code. Please see https://spdx.org for more information.",
+				"severity": "warning",
+				"sourceLocation": {
+					"end": -1,
+					"file": "tests/storage.test.js",
+					"start": -1
+				},
+				"type": "Warning"
+			},
+			{
+				"component": "general",
+				"errorCode": "3420",
+				"formattedMessage": "Warning: Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.7;\"\n--> tests/storage.test.js\n\n",
+				"message": "Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.7;\"",
+				"severity": "warning",
+				"sourceLocation": {
+					"end": -1,
+					"file": "tests/storage.test.js",
+					"start": -1
+				},
+				"type": "Warning"
+			}
+		],
+		"sources": {
+			"tests/storage.test.js": {
+				"ast": {
+					"absolutePath": "tests/storage.test.js",
+					"exportedSymbols": {},
+					"id": 1,
+					"nodeType": "SourceUnit",
+					"nodes": [],
+					"src": "978:0:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}
