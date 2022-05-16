@@ -366,7 +366,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/KingdomGoldCoin.sol": "KingdomGold"
+			"contracts/KingsGold.sol": "KingsGold"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -420,12 +420,12 @@
 				"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
 			]
 		},
-		"contracts/KingdomGoldCoin.sol": {
-			"keccak256": "0x32cc100d11b863019b58cf9932e854c6910b40d4d1900c568beff5e683476b08",
+		"contracts/KingsGold.sol": {
+			"keccak256": "0x5e5e79a6725d990e53298ec1984033e764e20e67e78250b9675263f5246c51be",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://11a1d5b84348886b713604ba9b8e345d06a88cc8d7b4c190c2ec59fb894d3e78",
-				"dweb:/ipfs/QmeKMchLDYQP9yXBXg5T21GzHSVGNbfvvABZMX21grfHDS"
+				"bzz-raw://ecf46c89d1e5705a7dc2da66f2eb6c67b179766d468f7ebd25446bd0173d3977",
+				"dweb:/ipfs/QmT8hbyjYXAUXAG3XmrQ7KKBjWLKZxxWEwWrdRzMLqxB6c"
 			]
 		}
 	},
