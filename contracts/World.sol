@@ -10,12 +10,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 //import "./ProvinceBeacon.sol";
 import "./Continent.sol";
-import "./ProvinceManager.sol";
 import "./KingsGold.sol";
 import "./Treasury.sol";
 
 contract World is Ownable {
-//contract World {
 
     address[] public continents;
 
@@ -33,7 +31,6 @@ contract World is Ownable {
     }
 
     function createWorld() external onlyOwner returns(uint) {
-        // Create a ProvinceManager Proxy instance
         BeaconProxy proxy = new BeaconProxy(address(continentBeacon),abi.encodeWithSelector(Continent(address(0)).initialize.selector, "KingsGold Provinces", address(treasury)));
 
         continents.push(address(proxy));

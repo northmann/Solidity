@@ -2,18 +2,15 @@
 // solhint-disable-next-line
 pragma solidity >0.8.2;
 
-// import "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
-// import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
+import "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
+import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-//import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-//import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
+//import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 
-
-//import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
 import "./ProvinceManager.sol";
@@ -21,18 +18,23 @@ import "./ArmyManager.sol";
 import "./Treasury.sol";
 import "./KingsGold.sol";
 import "./Interfaces.sol";
+import "./UserAccountManager.sol";
 
 
 contract Continent is Initializable, OwnableUpgradeable {
+    //using EnumerableSet for EnumerableSet.AddressSet;
+    //EnumerableSet.AddressSet private users;
+
+
     uint256 constant provinceCost = 1 ether;
 
+    address private userAccountManagerTemplate;
     address private provinceTemplate;
     address private armyTemplate;
 
+    UserAccountManager public userAccountManager;
     ProvinceManager public provinceManager;
     ArmyManager public armyManager;
-
-
 
 
     //mapping(address => uint8) public knownContracts;
@@ -50,6 +52,14 @@ contract Continent is Initializable, OwnableUpgradeable {
         //transferOwnership(tx.origin); // Now set ownership to the caller and not the world contract.
 
         treasury = Treasury(_treasury);
+
+        userAccountManagerTemplate = address(new UserAccountManager());
+        userAccountManager = UserAccountManager(address(
+            new ERC1967Proxy(
+                userAccountManagerTemplate,
+                abi.encodeWithSelector(UserAccountManager(address(0)).initialize.selector)
+            )
+        )); 
 
         provinceTemplate = address(new ProvinceManager());
         provinceManager = ProvinceManager(address(
