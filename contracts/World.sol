@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 //import "./ProvinceBeacon.sol";
 import "./Continent.sol";
+import "./ProvinceManager.sol";
 import "./KingsGold.sol";
 import "./Treasury.sol";
 
@@ -23,9 +24,11 @@ contract World is Ownable {
     Treasury public treasury;
 
 
+
     constructor(address _treasury) {
         treasury = Treasury(_treasury);
         continentBeacon = new UpgradeableBeacon(address(new Continent()));
+
         //transferOwnership(tx.origin); 
     }
 
@@ -38,7 +41,10 @@ contract World is Ownable {
         return continents.length;
     }
 
-    function upgradeProvinceManager(address _blueprint) external onlyOwner {
+    function upgradeContinent(address _blueprint) external onlyOwner {
         continentBeacon.upgradeTo(_blueprint);
     }
+
+
+
 }

@@ -2,8 +2,9 @@
 // solhint-disable-next-line
 pragma solidity >0.8.2;
 
-import "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
-import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
+// import "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
+// import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
+import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 //import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
@@ -11,11 +12,12 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
 
+
 //import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
-import "./ProvinceNFT.sol";
-import "./Province.sol";
+import "./ProvinceManager.sol";
+import "./ArmyManager.sol";
 import "./Treasury.sol";
 import "./KingsGold.sol";
 import "./Interfaces.sol";
@@ -24,12 +26,16 @@ import "./Interfaces.sol";
 contract Continent is Initializable, OwnableUpgradeable {
     uint256 constant provinceCost = 1 ether;
 
-    ProvinceNFT public NFTManager;
+    address private provinceTemplate;
+    address private armyTemplate;
 
-    mapping(uint256 => address) public provinces;
-    mapping(address => uint8) public knownContracts;
+    ProvinceManager public provinceManager;
+    ArmyManager public armyManager;
 
-    UpgradeableBeacon public beacon;
+
+
+
+    //mapping(address => uint8) public knownContracts;
 
     Treasury public treasury;
     
@@ -41,13 +47,25 @@ contract Continent is Initializable, OwnableUpgradeable {
 
     function initialize(string memory _name, address _treasury) public initializer {
         __Ownable_init(); // Initialize contract with World owner
-        transferOwnership(tx.origin); // Now set ownership to the caller and not the world contract.
+        //transferOwnership(tx.origin); // Now set ownership to the caller and not the world contract.
 
         treasury = Treasury(_treasury);
-        
-        NFTManager = new ProvinceNFT(_name, "KSGP"); // Create a new Province NFT contract.
-        
-        beacon = new UpgradeableBeacon(address(new Province())); // Make a Province blueprint and set it to the Beacon
+
+        provinceTemplate = address(new ProvinceManager());
+        provinceManager = ProvinceManager(address(
+            new ERC1967Proxy(
+                provinceTemplate,
+                abi.encodeWithSelector(ProvinceManager(address(0)).initialize.selector)
+            )
+        )); 
+
+        armyTemplate = address(new ArmyManager());
+        armyManager = ArmyManager(address(
+            new ERC1967Proxy(
+                armyTemplate,
+                abi.encodeWithSelector(ArmyManager(address(0)).initialize.selector)
+            )
+        )); 
     }
 
     // Everyone should be able to mint new Provinces from a payment in KingsGold
@@ -57,12 +75,7 @@ contract Continent is Initializable, OwnableUpgradeable {
 
         gold.transferFrom(msg.sender, address(treasury), provinceCost);
 
-        uint256 tokenId = NFTManager.safeMint(tx.origin);
-
-        BeaconProxy proxy = new BeaconProxy(address(beacon),abi.encodeWithSelector(Province(address(0)).initialize.selector, _name));
-
-        provinces[tokenId] = address(proxy);
-        addKnownContract(address(proxy));
+        uint256 tokenId = provinceManager.mintProvince(_name, msg.sender);
 
         return tokenId;
     }
@@ -71,13 +84,13 @@ contract Continent is Initializable, OwnableUpgradeable {
         return address(0);
     }
 
-    function addKnownContract(address _contract) internal {
-        knownContracts[_contract] = 1;
-    }
+    // function addKnownContract(address _contract) internal {
+    //     knownContracts[_contract] = 1;
+    // }
 
     function payForTime(address _contract) external {
         //check if contract is registred! 
-        require(knownContracts[_contract] != uint8(0), "Not known contract");
+        //require(knownContracts[_contract] != uint8(0), "Not known contract");
         require(ERC165Checker.supportsInterface(_contract, type(ITimeContract).interfaceId), "Not a time contract");
 
         ITimeContract timeContract = ITimeContract(_contract);
@@ -94,8 +107,4 @@ contract Continent is Initializable, OwnableUpgradeable {
     // function deposit(uint amount_) external {
     //     gold.transferFrom(msg.sender, address(gold), amount_);
     // }
-
-    function upgradeProvince(address _blueprint) external onlyOwner {
-        beacon.upgradeTo(_blueprint);
-    }
 }
