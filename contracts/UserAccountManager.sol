@@ -38,17 +38,19 @@ contract UserAccountManager is Initializable, AccessControlUpgradeable, UUPSUpgr
     }
 
     
-    function createUserAccount() private onlyRole(MINTER_ROLE) returns(address) {
+    function ensureUserAccount() public onlyRole(MINTER_ROLE) returns(address) {
         if(users[tx.origin] != address(0)) return users[tx.origin]; // If exist return
         BeaconProxy proxy = new BeaconProxy(address(userAccountBeacon),abi.encodeWithSelector(UserAccount(address(0)).initialize.selector));
-        users[msg.sender] = address(proxy);
+        users[tx.origin] = address(proxy);
         return address(proxy);
     }
 
+    /// Upgrade the UserAccount template
     function upgradeUserAccountTemplate(address _template) external onlyRole(UPGRADER_ROLE) {
         userAccountBeacon.upgradeTo(_template);
     }
 
+    /// Upgrade the UserAccountManager template
     function _authorizeUpgrade(address newImplementation)
         internal
         onlyRole(UPGRADER_ROLE)

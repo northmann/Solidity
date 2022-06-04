@@ -4,7 +4,7 @@ pragma solidity >0.8.2;
 
 interface ITimeContract {   
 
-    function timeCost() external returns(uint256);
+    function payForTimeCost() external returns(uint256);
     function paidForTime() external returns(uint256);
 }
 
@@ -13,4 +13,4 @@ interface IContractType {
 }
 
 interface IProvince { }
-interface ITransfer { }
+interface IEvent { }

@@ -19,6 +19,7 @@ import "./Treasury.sol";
 import "./KingsGold.sol";
 import "./Interfaces.sol";
 import "./UserAccountManager.sol";
+import "./UserAccount.sol";
 
 
 contract Continent is Initializable, OwnableUpgradeable {
@@ -80,12 +81,16 @@ contract Continent is Initializable, OwnableUpgradeable {
 
     // Everyone should be able to mint new Provinces from a payment in KingsGold
     function createProvince(string memory _name) external returns(uint256) {
+        UserAccount user = UserAccount(userAccountManager.ensureUserAccount());
+        require(user.provinceCount() > 10, "Cannot exeed 10 provinces"); // Temp setup for now 4 june 2022
+
         KingsGold gold = KingsGold(treasury.gold());
         require(provinceCost <= gold.balanceOf(msg.sender), "Not enough tokens in the reserve");
 
         gold.transferFrom(msg.sender, address(treasury), provinceCost);
 
-        uint256 tokenId = provinceManager.mintProvince(_name, msg.sender);
+        (uint256 tokenId, address proxy) = provinceManager.mintProvince(_name, msg.sender);
+        user.addProvince(proxy);
 
         return tokenId;
     }

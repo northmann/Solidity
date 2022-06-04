@@ -47,12 +47,12 @@ contract ProvinceManager is ProvincesNFT {
         beacon = new UpgradeableBeacon(address(new Province())); // Make a Province blueprint and set it to the Beacon
     }
 
-    function mintProvince(string memory _name, address _owner) public onlyRole(MINTER_ROLE) returns(uint256) {
+    function mintProvince(string memory _name, address _owner) public onlyRole(MINTER_ROLE) returns(uint256, address) {
         uint256 tokenId = safeMint(_owner);
         
         BeaconProxy proxy = new BeaconProxy(address(beacon),abi.encodeWithSelector(Province(address(0)).initialize.selector, _name, _owner));
         provinces[tokenId] = address(proxy);
-        return tokenId;
+        return (tokenId, address(proxy));
     }
 
     function upgradeProvince(address _template) external onlyRole(UPGRADER_ROLE) {

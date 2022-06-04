@@ -9,41 +9,31 @@ import "@openzeppelin/contracts/utils/introspection/ERC165Storage.sol";
 
 import "./Interfaces.sol";
 
-abstract contract Transfer is ERC165Storage, Initializable, OwnableUpgradeable, ITransfer, ITimeContract {
+abstract contract Event is ERC165Storage, Initializable, OwnableUpgradeable, IEvent, ITimeContract {
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() payable {
         _disableInitializers();
     }
 
-    function initialize() initializer public {
+    function initialize() initializer public virtual {
         __Ownable_init();
-		_registerInterface(type(ITransfer).interfaceId);
+		_registerInterface(type(IEvent).interfaceId);
 		_registerInterface(type(ITimeContract).interfaceId);
 
     }
 
     /// The cost of the time to complete the transfer.
-    function timeCost() external pure override returns(uint256)
+    function payForTimeCost() external view override virtual returns(uint256)
     {
         return 0;
     }
 
     /// When a user has paid for time, this method gets called.
-    function paidForTime() external view override onlyOwner returns(uint256)
+    function paidForTime() external view override virtual onlyOwner returns(uint256)
     {
         return 0;
     }
 
 
-}
-
-
-abstract contract NFTTransfer is Transfer {
-
-
-
-    // function addBoost(string memory, uint256 _currentValue) public virtual returns(uint256) {
-    //     return _currentValue;
-    // }
 }
