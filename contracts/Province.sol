@@ -4,7 +4,7 @@ pragma solidity >0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165Storage.sol";
-
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 
 
@@ -27,7 +27,10 @@ struct Resources {
 }
 
 
-contract Province is Initializable, ERC165Storage, IProvince {
+contract Province is Initializable, AccessControlUpgradeable, IProvince {
+    bytes32 public constant VASSAL_ROLE = keccak256("VASSAL_ROLE");
+    bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
+
     string public name;
 
     address public owner;
@@ -40,6 +43,7 @@ contract Province is Initializable, ERC165Storage, IProvince {
     address public armyContract;
 
     EnumerableSet.AddressSet private work;
+    EnumerableSet.AddressSet private building;
     EnumerableSet.AddressSet private incomingTransfers;
     EnumerableSet.AddressSet private insideTransfers;
     EnumerableSet.AddressSet private outgoingTransfers;
@@ -51,10 +55,25 @@ contract Province is Initializable, ERC165Storage, IProvince {
     }
 
     function initialize(string memory _name, address _owner) initializer public {
+        grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        grantRole(DEFAULT_ADMIN_ROLE, _owner);
+        grantRole(OWNER_ROLE, _owner);
         name = _name;
-        owner = _owner;
-        _registerInterface(type(IProvince).interfaceId);
-
     }
 
+
+    function setVassal(address _user) external onlyRole(OWNER_ROLE)
+    {
+        _setupRole(VASSAL_ROLE, _user);
+    }
+
+    function createFarmEvent(address _hero, uint256 populationUsed) external ownerOrVassel {
+        require(populationUsed <= population, "not enough population");
+        // check that the hero exist and is controlled by user.
+        population = population - populationUsed;
+        //BeaconProxy proxy = new BeaconProxy(address(farmEventBeacon),abi.encodeWithSelector(FarmEvent(address(0)).initialize.selector, _hero, populationUsed));
+        //users[tx.origin] = address(proxy);
+        
+
+    }
 }

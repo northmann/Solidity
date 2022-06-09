@@ -103,13 +103,14 @@ contract Continent is Initializable, OwnableUpgradeable {
     //     knownContracts[_contract] = 1;
     // }
 
+    /// The user pays to reduce the time on a contract.
     function payForTime(address _contract) external {
         //check if contract is registred! 
         //require(knownContracts[_contract] != uint8(0), "Not known contract");
         require(ERC165Checker.supportsInterface(_contract, type(ITimeContract).interfaceId), "Not a time contract");
 
         ITimeContract timeContract = ITimeContract(_contract);
-        uint256 timeCost = timeContract.timeCost();
+        uint256 timeCost = timeContract.priceForTime();
         KingsGold gold = KingsGold(treasury.gold());
         require(timeCost <= gold.balanceOf(msg.sender), "Not enough gold");
 
